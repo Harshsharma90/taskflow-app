@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Animated Gradient Background */
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(-45deg, #667eea, #764ba2, #6a11cb, #2575fc);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glass Card */
+.auth-card {
+  width: 950px;
+  height: 600px;
+  display: flex;
+  border-radius: 25px;
+  overflow: hidden;
+  backdrop-filter: blur(25px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Branding Side */
+.auth-brand {
+  flex: 1;
+  padding: 80px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-brand h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.auth-brand p {
+  font-size: 18px;
+  opacity: 0.85;
+}
+
+/* Form Side */
+.auth-form {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+}
+
+.auth-form h2 {
+  margin-bottom: 35px;
+  font-size: 28px;
+}
+
+/* Floating Inputs */
+.input-group {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+}
+
+.input-group label {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  color: gray;
+  transition: 0.3s ease;
+  background: white;
+  padding: 0 6px;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label {
+  top: -9px;
+  font-size: 12px;
+  color: #667eea;
+}
+
+/* Button */
+.primary-btn {
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Error Box */
+.error-box {
+  background: #ffe5e5;
+  color: #d8000c;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* Switch Text */
+.switch-text {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.switch-text span {
+  color: #667eea;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .auth-card {
+    flex-direction: column;
+    width: 90%;
+    height: auto;
+  }
+
+  .auth-brand {
+    display: none;
+  }
+
+  .auth-form {
+    border-radius: 25px;
+  }
+}
