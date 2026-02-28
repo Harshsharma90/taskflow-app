@@ -3,7 +3,7 @@ import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 import Filters from "./components/Filters";
 import Overview from "./components/Overview";
-import "./app.css";
+import "./App.css";
 
 import { auth, db } from "./firebase/config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
