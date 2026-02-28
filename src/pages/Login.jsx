@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { auth } from "../firebase/config";
+import { auth, provider } from "../firebase/config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import "./login.css";
 
@@ -24,7 +25,21 @@ export default function Login() {
         await createUserWithEmailAndPassword(auth, email, password);
       }
     } catch (err) {
-      setError("Invalid email or password");
+      setError(err.message);
+    }
+
+    setLoading(false);
+  };
+
+
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      setError(err.message);
     }
 
     setLoading(false);
@@ -33,14 +48,12 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-
         <div className="auth-brand">
           <h1>TaskFlow</h1>
           <p>Organize your tasks. Elevate your productivity.</p>
         </div>
 
         <div className="auth-form">
-
           <h2>{isLogin ? "Welcome Back 👋" : "Create Account 🚀"}</h2>
 
           {error && <div className="error-box">{error}</div>}
@@ -77,6 +90,18 @@ export default function Login() {
               : "Register"}
           </button>
 
+         <button
+  className="google-btn"
+  onClick={handleGoogleLogin}
+  disabled={loading}
+>
+  <img
+    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+    alt="google"
+  />
+  Continue with Google
+</button>
+
           <p className="switch-text">
             {isLogin
               ? "Don't have an account?"
@@ -85,7 +110,6 @@ export default function Login() {
               {isLogin ? " Register" : " Login"}
             </span>
           </p>
-
         </div>
       </div>
     </div>

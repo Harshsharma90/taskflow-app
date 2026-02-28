@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth,GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCHTbgVkAk_yHV0m75WAiQFPFCTQkUj-lA",
+  apiKey: "AIzaSyD0QBajc1e6Jm8Vp8VDiMHYLZ2WcJRwJr4",
   authDomain: "taskflow-13676.firebaseapp.com",
   projectId: "taskflow-13676",
   storageBucket: "taskflow-13676.firebasestorage.app",
@@ -15,4 +15,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
