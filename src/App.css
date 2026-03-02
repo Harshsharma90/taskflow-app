@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 html, body {
@@ -63,6 +64,76 @@ body::after {
 .logo {
   font-size: 28px;
   font-weight: 600;
+}
+/* notification */
+
+
+.notificationWrapper {
+  position: relative;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.bell {
+  font-size: 22px;
+  position: relative;
+}
+
+.notifCount {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.notifDropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  width: 250px;
+  background: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.notifItem {
+  padding: 8px 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.notifItem:last-child {
+  border-bottom: none;
+}
+.notifHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.clearBtn:hover {
+  text-decoration: underline;
+}
+
+.noNotif {
+  font-size: 14px;
+  color: gray;
+  text-align: center;
+  padding: 10px 0;
 }
 
 /* Logout Button */
@@ -210,6 +281,31 @@ h2 {
   cursor: pointer;
 }
 
+.taskTextArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.reminderText {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #666;
+}
+
+.reminderText.overdue {
+  color: red;
+  font-weight: bold;
+}
+
+.reminderText.today {
+  color: orange;
+  font-weight: 600;
+}
+
+.taskOverdue {
+  border-left: 4px solid red;
+}
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3,1fr);
@@ -282,6 +378,9 @@ h2 {
   border-bottom: 1px solid #e5e7eb;
 
   }
+
+ 
+
   .container {
      width: 100%;
   max-width: 1400px;
@@ -313,4 +412,9 @@ h2 {
   .mobileOnly {
     display: block;
   }
+    .notifCount {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+
 }

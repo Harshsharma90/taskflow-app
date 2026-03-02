@@ -10,24 +10,67 @@ export default function TaskItem({ task, toggleTask, deleteTask, editTask }) {
     setEditing(false);
   };
 
+  const now = new Date();
+
+  // Convert Firestore timestamp safely
+  const reminderDate = task.reminder
+    ? new Date(
+        task.reminder.seconds
+          ? task.reminder.seconds * 1000
+          : task.reminder
+      )
+    : null;
+
+  const isOverdue =
+    reminderDate && !task.done && reminderDate < now;
+
+  const isToday =
+    reminderDate &&
+    reminderDate.toDateString() === now.toDateString();
+
   return (
-    <div className="task">
+    <div className={`task ${isOverdue ? "taskOverdue" : ""}`}>
       <div className="taskLeft">
         <input
           type="checkbox"
           checked={task.done}
-          onChange={() => toggleTask(task.id)}
+          onChange={() => toggleTask(task.id, task.done)}
         />
 
-        {editing ? (
-          <input
-            className="editInput"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
-        ) : (
-          <span className={task.done ? "done" : ""}>{task.text}</span>
-        )}
+        <div className="taskTextArea">
+          {editing ? (
+            <input
+              className="editInput"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          ) : (
+            <>
+              <span className={task.done ? "done" : ""}>
+                {task.text}
+              </span>
+
+              {reminderDate && (
+                <div
+                  className={`reminderText ${
+                    isOverdue
+                      ? "overdue"
+                      : isToday
+                      ? "today"
+                      : ""
+                  }`}
+                >
+                  {isOverdue
+                    ? "🔴 Overdue: "
+                    : isToday
+                    ? "🟡 Due Today: "
+                    : "⏰ "}
+                  {reminderDate.toLocaleString()}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div className="taskActions">
@@ -36,12 +79,18 @@ export default function TaskItem({ task, toggleTask, deleteTask, editTask }) {
             Save
           </button>
         ) : (
-          <button className="editBtn" onClick={() => setEditing(true)}>
+          <button
+            className="editBtn"
+            onClick={() => setEditing(true)}
+          >
             Edit
           </button>
         )}
 
-        <button className="deleteBtn" onClick={() => deleteTask(task.id)}>
+        <button
+          className="deleteBtn"
+          onClick={() => deleteTask(task.id)}
+        >
           Delete
         </button>
       </div>
