@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import "./login.css";
 
@@ -45,6 +46,20 @@ export default function Login() {
     setLoading(false);
   };
 
+  const handleForgotPassword = async () => {
+  if (!email) {
+    setError("Please enter your email first.");
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("Password reset email sent. Check your inbox.");
+  } catch (err) {
+    setError(err.message);
+  }
+};
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -77,6 +92,10 @@ export default function Login() {
             />
             <label>Password</label>
           </div>
+
+          <p className="forgot-password" onClick={handleForgotPassword}>
+  Forgot Password?
+</p>
 
           <button
             className="primary-btn"
