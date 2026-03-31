@@ -69,7 +69,7 @@ export default function Login() {
         </div>
 
         <div className="auth-form">
-          <h2>{isLogin ? "Welcome Back 👋" : "Create Account 🚀"}</h2>
+          <h2>{isLogin ? "Welcome Back  👋" : "Create Account 🚀"}</h2>
 
           {error && <div className="error-box">{error}</div>}
 

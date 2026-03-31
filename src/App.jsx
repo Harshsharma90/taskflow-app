@@ -3,6 +3,8 @@ import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 import Filters from "./components/Filters";
 import Overview from "./components/Overview";
+import ReviewSection from "./components/ReviewSection";
+import AdminReviewsPanel from "./components/AdminReviewsPanel";
 import "./App.css";
 
 import { auth, db } from "./firebase/config";
@@ -29,20 +31,18 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [appNotifications, setAppNotifications] = useState([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const [showAdminReviews, setShowAdminReviews] = useState(false);
 
   const notifiedTasks = useRef(new Set());
 
- 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
- 
   useEffect(() => {
     if (!user) return;
 
@@ -62,7 +62,13 @@ export default function App() {
     return () => unsubscribe();
   }, [user]);
 
-  
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+
   const enableNotifications = async () => {
     if (!("Notification" in window)) {
       alert("Browser does not support notifications");
@@ -78,7 +84,7 @@ export default function App() {
     }
   };
 
- 
+
   useEffect(() => {
     if (!("Notification" in window)) return;
     if (Notification.permission !== "granted") return;
@@ -99,7 +105,7 @@ export default function App() {
           now >= reminderDate &&
           !notifiedTasks.current.has(task.id)
         ) {
-          // Add in-app notification
+       
           setAppNotifications((prev) => [
             ...prev,
             {
@@ -109,10 +115,12 @@ export default function App() {
             },
           ]);
 
-          // Browser notification
-          new Notification("Task Reminder 🔔", {
-            body: task.text,
-          });
+       
+          if (document.hidden) {
+            new Notification("Task Reminder 🔔", {
+              body: task.text,
+            });
+          }
 
           notifiedTasks.current.add(task.id);
         }
@@ -122,7 +130,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [tasks]);
 
-  // ➕ Add Task
+
   const addTask = async (text, dateTime) => {
     if (!text.trim() || !user) return;
 
@@ -134,7 +142,6 @@ export default function App() {
       reminder: dateTime ? new Date(dateTime) : null,
     });
   };
-
 
   const deleteTask = async (id) => {
     await deleteDoc(doc(db, "tasks", id));
@@ -151,7 +158,6 @@ export default function App() {
       text: newText,
     });
   };
-
 
   const clearNotifications = () => {
     setAppNotifications([]);
@@ -203,13 +209,14 @@ export default function App() {
       <div className="topBar">
         <h2 className="logo">TaskFlow</h2>
 
-        {Notification.permission !== "granted" && (
-          <button onClick={enableNotifications}>
-            Enable Notifications 🔔
-          </button>
-        )}
+        {"Notification" in window &&
+          Notification.permission !== "granted" && (
+            <button onClick={enableNotifications}>
+              Enable Notifications 🔔
+            </button>
+          )}
 
-      
+
         <div className="notificationWrapper">
           <div
             className="bell"
@@ -227,10 +234,7 @@ export default function App() {
             <div className="notifDropdown">
               <div className="notifHeader">
                 {appNotifications.length > 0 && (
-                  <button
-                    className="clearBtn"
-                    onClick={clearNotifications}
-                  >
+                  <button className="clearBtn" onClick={clearNotifications}>
                     Clear
                   </button>
                 )}
@@ -250,6 +254,16 @@ export default function App() {
           )}
         </div>
 
+
+        {/* Admin Reviews button — only visible to your account */}
+{user?.email === "jarvis9050@gmail.com" && (
+  <button
+    className="adminReviewsBtn desktopOnly"
+    onClick={() => setShowAdminReviews(true)}
+  >
+    ⭐ Reviews
+  </button>
+)}
         <button
           className="logoutBtn desktopOnly"
           onClick={handleLogout}
@@ -293,6 +307,16 @@ export default function App() {
         </div>
         <Overview tasks={tasks} />
       </div>
+
+      {/* Admin panel modal */}
+{showAdminReviews && (
+  <AdminReviewsPanel onClose={() => setShowAdminReviews(false)} />
+)}
+
+{/* Public review section — shown to all logged-in users */}
+<div className="container">
+  <ReviewSection />
+</div>
     </div>
   );
 }
